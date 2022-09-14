@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+</head>
+<body>
+    <form onsubmit="submitFunction(); return false">
+<input type="text" id="city">
+<button>submit</button>
+</form>
+<div id="current"></div>
+<div id="result"></div>
+<div id="downResult"></div>
+<div id="upResult"></div>
+<div id="icon"></div>
+<script>
+    function submitFunction(){
+    let cityName = document.querySelector("#city").value
+
+    console.log("CityName:" , cityName); 
+
+    //axios.get('https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=62beca7abecd9df6160deafa94100d92&units=metric')
+    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=62beca7abecd9df6160deafa94100d92&units=metric`)
+//   .then(function (response) {
+//     // handle success
+//     console.log(response.data);
+//   })
+//   .catch(function (error) {
+//                     // handle error
+//                     console.log(error);
+//                 })
+.then(function (response) {
+
+document.querySelector("#current").innerHTML =
+    `<div class="weatherCard">
+    <span id="upResult"></span>
+    <h1 id="result"></h1>
+    <img src="" id="icon" />
+    <br />
+    <span id="downResult"></span>
+</div>`
+
+
+// handle success
+console.log(response.data);
+
+document.querySelector("#result").innerHTML =
+    `${response.data.main.temp}°C`;
+document.querySelector("#upResult").innerHTML =
+    `${response.data.name} <br/> Now`;
+document.querySelector("#downResult").innerHTML =
+    `${response.data.main.temp_min}°C - ${response.data.main.temp_max}°C `;
+
+document.querySelector("#icon").src = `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@4x.png`
+})
+.catch(function (error) {
+// handle error
+console.log(error);
+})
+
+}
+</script>
+</body>
+</html>
